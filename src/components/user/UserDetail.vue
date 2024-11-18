@@ -3,7 +3,9 @@
         <fieldset>
             <legend>내 정보</legend>
             <div>
-                <p><strong>계정 ID: </strong>{{ user.accountId }}</p>
+                <p hidden>ID: {{ user.id }}</p>
+                <p hidden>권한: {{ user.type }}</p>
+                <p><strong>계정ID: </strong>{{ user.accountId }}</p>
                 <p><strong>닉네임: </strong>{{ user.nickname }}</p>
                 <p><strong>생일: </strong>{{ user.birthDate }}</p>
                 <p><strong>별자리: </strong>{{ user.zodiacSign }}</p>
@@ -24,6 +26,4 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

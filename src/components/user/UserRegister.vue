@@ -3,7 +3,7 @@
         <fieldset>
             <legend>등록</legend>
             <div>
-                <label for="accountId">계정 ID : </label>
+                <label for="accountId">계정ID : </label>
                 <input type="text" id="accountId" v-model="user.accountId">
             </div>
             <div>

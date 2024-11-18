@@ -3,7 +3,7 @@
         <fieldset>
             <legend>비밀번호 찾기</legend>
             <div>
-                <label for="accountId">계정 ID : </label>
+                <label for="accountId">계정ID : </label>
                 <input type="text" id="accountId" v-model="loginRequestForm.accountId">
             </div>
             <div>
