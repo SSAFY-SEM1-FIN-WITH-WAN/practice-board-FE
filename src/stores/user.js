@@ -5,89 +5,136 @@ import router from '@/router'
 
 axios.defaults.baseURL = 'http://localhost:8080/api/users'
 
-export const useUserStore = defineStore('user', () => {
+export const useUserStore = defineStore('userStore', () => {
 
-    const userList = ref([])
-    const user = ref({})
-    const loginRequestForm = ref({})
-    const passwordFinderForm = ref({})
-    const passwordHint = ref('')
-    const fortune = ref({})
+  const userList = ref([])
+  const loginUser = ref({})
+  const errorMessage = ref('')
+  const passwordHint = ref('')
+  const fortune = ref({})
 
-    const getUserList = function () {
-        axios.get('/admin')
-            .then((response) => {
-                userList.value = response.data
-            })
-            .catch((error) => {
-            console.log(error)
-        })
-    }
+  const getUserList = function () {
+    axios.get('/admin', {
+      headers: {
+        'access-token': sessionStorage.getItem('access-token')
+      }
+    })
+      .then((response) => {
+        userList.value = response.data
+      })
+      .catch((error) => {
+        console.log(error)
+        router.push({ name: 'home' })
+      })
+  }
 
-    const getUser = function () {
-        axios.get('')
-            .then((response) => {
-                user.value = response.data
-            })
-            .catch((error) => {
-            console.log(error)
-        })
-    }
+  const getUser = function () {
+    axios.get('', {
+      headers: {
+        'access-token': sessionStorage.getItem('access-token')
+      }
+    })
+      .then((response) => {
+        loginUser.value = response.data
+      })
+      .catch((error) => {
+        console.log(error)
+        router.push({ name: 'home' })
+      })
+  }
 
-    const signup = function (user) {
-        axios.post('/signup', user)
-            .then(() => {
-                router.push({ name: 'userLogin'})
-            })
-            .catch((error) => {
-            console.log(error)
-        })
-    }
+  const signup = function (user) {
+    axios.post('/signup', user)
+      .then(() => {
+        errorMessage.value = ''
+        router.push({ name: 'userLogin' })
+      })
+      .catch((error) => {
+        console.log(error)
+        errorMessage.value = '중복된 아이디 닉네임입니다'
+        router.push({ name: 'signup' })
+      })
+  }
 
-    const login = function (loginRequestForm) {
-        axios.post('/login', loginRequestForm)
-            .then((response) => {
-                sessionStorage.setItem('access-token', response.data['access-token'])
-                router.push({ name: 'home'})
-            })
-            .catch((error) => {
-                console.log(error)
-                router.push({ name: 'userLogin' })
-        })
-    }
+  const modifyUser = function (loginUser) {
+    axios.put('/info', {
+      headers: {
+        'access-token': sessionStorage.getItem('access-token')
+      },
+      data: loginUser
+    })
+      .then(() => {
+        errorMessage.value = ''
+        router.push({ name: 'userDetail' })
+      })
+      .catch((error) => {
+        console.log(error)
+        errorMessage.value = '중복된 아이디 닉네임입니다'
+        router.push({ name: 'userUpdate' })
+      })
+  }
 
-    const modifyUser = function (user) {
-        axios.put('/info', user)
-            .then(() => {
-            router.push({ name: 'userDetail'})
-            })
-            .catch((error) => {
-            console.log(error)
-        })
-    }
+  const login = function (loginRequestForm) {
 
-    const getPasswordHint = function (passwordFinderForm) {
-        axios.post('/password', passwordFinderForm)
-            .then((response) => {
-            passwordHint.value = response.data
-            })
-            .catch((error) => {
-            console.log(error)
-        })
-    }
+    sessionStorage.removeItem('access-token');
 
-    const getFortune = function () {
-        axios.get('/fortune')
-            .then((response) => {
-            fortune.value = response.data
-            })
-            .catch((error) => {
-            console.log(error)
-        })
-    }
+    axios.post('/login', loginRequestForm)
+      .then((response) => {
+        if (response.data && response.data['access-token']) {
+          errorMessage.value = ''
+          sessionStorage.setItem('access-token', response.data['access-token']);
+          router.push({ name: 'home' })
+        } else {
+          errorMessage.value = '아이디와 비밀번호를 확인해주세요'
+          console.error('액세스 토큰 없음');
+        }
+      })
+      .catch((error) => {
+        errorMessage.value = '아이디와 비밀번호를 확인해주세요'
+        console.error(error)
+        router.push({ name: 'userLogin' })
+      })
+  }
 
-    return {
-        userList, user, loginRequestForm, passwordFinderForm, passwordHint, fortune, 
-        getUserList, getUser, signup, login, modifyUser, getPasswordHint, getFortune
-    }
+  const logout = function () {
+    sessionStorage.removeItem('access-token');
+    console.log('로그아웃 완료');
+    router.push({ name: 'home' })
+  };
+
+  const getPasswordHint = function (passwordFinderForm) {
+    axios.post('/password', passwordFinderForm)
+      .then((response) => {
+        if (response.data && response.data.endsWith('*')) {
+          passwordHint.value = response.data;
+        } else {
+          passwordHint.value = '일치하는 계정이 없습니다';
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+        passwordHint.value = '일치하는 계정이 없습니다'
+        router.push({ name: 'userLogin' })
+      })
+  }
+
+  const getFortune = function () {
+    axios.get('/fortune', {
+      headers: {
+        'access-token': sessionStorage.getItem('access-token')
+      }
+    })
+      .then((response) => {
+        fortune.value = response.data
+      })
+      .catch((error) => {
+        console.log(error)
+        router.push({ name: 'todayFortune' })
+      })
+  }
+
+  return {
+    userList, loginUser, errorMessage, passwordHint, fortune,
+    getUserList, getUser, signup, modifyUser, login, logout, getPasswordHint, getFortune,
+  }
 })

@@ -1,16 +1,13 @@
+<script setup>
+    import TheHeaderNav from '@/components/common/TheHeaderNav.vue';
+</script>
+
 <template>
     <div>
         <TheHeaderNav/>
         <RouterView/>
-        <TheFooterNav/>
     </div>
 </template>
-
-<script setup>
-import TheFooterNav from './components/common/TheFooterNav.vue';
-import TheHeaderNav from './components/common/TheHeaderNav.vue';
-
-</script>
 
 <style scoped>
 

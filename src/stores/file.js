@@ -5,77 +5,17 @@ import router from '@/router'
 
 axios.defaults.baseURL = 'http://localhost:8080/api/boards'
 
-export const useFileStore = defineStore('file', () => {
+export const useFileStore = defineStore('fileStore', () => {
 
-    const ImageFileList = ref([])
-    const ImageFile = ref({})
-    const ImageFileThumb = ref({})
+  // const getImageFileList
 
-    const getImageFileList = function () {
-        axios.get('/${boardId}/images', {
-            headers: {
-                'access-token': sessionStorage.getItem('access-token')
-            }
-        })
-            .then((response) => {
-                ImageFileList.value = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }
+  // const getImageFileThumb
 
-    const getImageFileThumb = function() {
-        axios.get('/${boardId}/images/thumb', {
-            headers: {
-                'access-token': sessionStorage.getItem('access-token')
-            }
-        })
-            .then((response) => {
-                ImageThumb.value = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }
+  // const uploadImagefile
 
-    const uploadImageFile = function (files) {
-        const formData = new FormData()
+  // const removeImageFile
 
-        files.forEach(file => {
-            formData.append('images', file)
-        })
-
-        axios.post('/${boardId}/images', formData, {
-            headers: {
-                'access-token': sessionStorage.getItem('access-token'),
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-            .then(() => {
-                router.push({ name: 'BoardDetail' })
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }
-
-    const removeImageFile = function () {
-        axios.delete('/${boardId}/images/${imageId}', {
-            headers: {
-                'access-token': sessionStorage.getItem('access-token')
-            }
-        })
-            .then(() => {
-                router.push({ name: 'BoardDetail' })
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }
-
-    return {
-        ImageFileList, ImageFile, ImageFileThumb,
-        getImageFileList, getImageFileThumb, uploadImageFile, removeImageFile,
-    }
+  return {
+    getImageFileList, getImageFileThumb, uploadImageFile, removeImageFile,
+  }
 })

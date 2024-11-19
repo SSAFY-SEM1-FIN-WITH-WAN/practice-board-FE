@@ -5,102 +5,21 @@ import router from '@/router'
 
 axios.defaults.baseURL = 'http://localhost:8080/api/boards'
 
-export const useBoardStore = defineStore('board', () => {
+export const useBoardStore = defineStore('boardStore', () => {
 
-    const boardList = ref([])
-    const board = ref({})
-    const searchConditionForm = ref({})
+  // const getBoardList
 
-    const getBoardList = function () {
-        axios.get('', {
-            headers: {
-                'access-token': sessionStorage.getItem('access-token')
-            }
-        })
-            .then((response) => {
-            boardList.value = response.data
-            })
-            .catch((error) => {
-            console.log(error)
-        })
-    }
+  // const searchBoard
 
-    const searchBoard = function (searchConditionForm) {
-        axios.get('/search', {
-            params: searchConditionForm,
-            headers: {
-                'access-token': sessionStorage.getItem('access-token')
-            }
-        })
-            .then((response) => {
-            boardList.value = response.data
-            })
-            .catch((error) => {
-            console.log(error)
-        })
-    }
+  // const getBoard
 
-    const getBoard = function () {
-        axios.get('/${boardId}', {
-            headers: {
-                'access-token': sessionStorage.getItem('access-token')
-            }
-        })
-            .then((response) => {
-            board.value = response.data
-            })
-            .catch((error) => {
-            console.log(error)
-        })
-    }
+  // const createBoard
 
-    const createBoard = function (board) {
-        axios.post('', {
-            data: board,
-            headers: {
-                'access-token': sessionStorage.getItem('access-token')
-            }
-        })
-            .then(() => {
-            router.push({name: boardList})
-            })
-            .catch((error) => {
-            console.log(error)
-        })
-    }
+  // const modifyBoard
 
-    const modifyBoard = function (board) {
-        axios.put('', {
-            data: board,
-            headers: {
-                'access-token': sessionStorage.getItem('access-token')
-            }
-        })
-            .then(() => {
-            router.push({name: boardList})
-            })
-            .catch((error) => {
-            console.log(error)
-        })
-    }
+  // const removeBoard
 
-    const removeBoard = function () {
-        axios.delete('/${boardId}', {
-            headers: {
-                'access-token': sessionStorage.getItem('access-token')
-            }
-        })
-            .then(() => {
-            getBoardList()
-            router.push({name: boardList})
-            })
-            .catch((error) => {
-            console.log(error)
-        })
-    }
-
-    return {
-        boardList, board, searchConditionForm,
-        getBoardList, searchBoard, getBoard, createBoard, modifyBoard, removeBoard,
-    }
+  return {
+    getBoardList, searchBoard, getBoard, createBoard, modifyBoard, removeBoard,
+  }
 })
