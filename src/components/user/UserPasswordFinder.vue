@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 
 const userStore = useUserStore();
@@ -12,10 +12,6 @@ const passwordFinderForm = ref({
 const getPasswordHint = function () {
     userStore.getPasswordHint(passwordFinderForm.value)
 }
-
-// onMounted(() => {
-//     userStore.passwordHint = ''
-// })
 
 </script>
 

@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import router from '@/router'
 
-axios.defaults.baseURL = 'http://localhost:8080/api/users'
+const REST_USER_API = `http://localhost:8080/api/users`
 
 export const useUserStore = defineStore('userStore', () => {
 
@@ -14,7 +14,7 @@ export const useUserStore = defineStore('userStore', () => {
   const fortune = ref({})
 
   const getUserList = function () {
-    axios.get('/admin', {
+    axios.get(`${REST_USER_API}/admin`, {
       headers: {
         'access-token': sessionStorage.getItem('access-token')
       }
@@ -29,7 +29,7 @@ export const useUserStore = defineStore('userStore', () => {
   }
 
   const getUser = function () {
-    axios.get('', {
+    axios.get(REST_USER_API, {
       headers: {
         'access-token': sessionStorage.getItem('access-token')
       }
@@ -44,7 +44,7 @@ export const useUserStore = defineStore('userStore', () => {
   }
 
   const signup = function (user) {
-    axios.post('/signup', user)
+    axios.post(`${REST_USER_API}/signup`, user)
       .then(() => {
         errorMessage.value = ''
         router.push({ name: 'userLogin' })
@@ -56,12 +56,11 @@ export const useUserStore = defineStore('userStore', () => {
       })
   }
 
-  const modifyUser = function (loginUser) {
-    axios.put('/info', {
+  const modifyUser = function () {
+    axios.put(`${REST_USER_API}/info`, loginUser.value, { 
       headers: {
         'access-token': sessionStorage.getItem('access-token')
-      },
-      data: loginUser
+      }
     })
       .then(() => {
         errorMessage.value = ''
@@ -78,7 +77,7 @@ export const useUserStore = defineStore('userStore', () => {
 
     sessionStorage.removeItem('access-token');
 
-    axios.post('/login', loginRequestForm)
+    axios.post(`${REST_USER_API}/login`, loginRequestForm)
       .then((response) => {
         if (response.data && response.data['access-token']) {
           errorMessage.value = ''
@@ -103,7 +102,7 @@ export const useUserStore = defineStore('userStore', () => {
   };
 
   const getPasswordHint = function (passwordFinderForm) {
-    axios.post('/password', passwordFinderForm)
+    axios.post(`${REST_USER_API}/password`, passwordFinderForm)
       .then((response) => {
         if (response.data && response.data.endsWith('*')) {
           passwordHint.value = response.data;
@@ -119,7 +118,7 @@ export const useUserStore = defineStore('userStore', () => {
   }
 
   const getFortune = function () {
-    axios.get('/fortune', {
+    axios.get(`${REST_USER_API}/fortune`, {
       headers: {
         'access-token': sessionStorage.getItem('access-token')
       }
