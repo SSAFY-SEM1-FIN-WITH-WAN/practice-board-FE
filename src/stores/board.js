@@ -13,25 +13,36 @@ export const useBoardStore = defineStore('boardStore', () => {
   const getBoardList = function () {
     axios.get(REST_BOARD_API)
       .then((response) => {
-      boardList.value = response.data
+        boardList.value = response.data
       })
       .catch((error) => {
         console.log(error)
-        router.push({ name: 'home'})
-    })
+        router.push({ name: 'home' })
+      })
   }
 
-  // const searchBoard
+  const searchBoard = function (searchInfo) {
+    axios.get(`${REST_BOARD_API}/search`, {
+      params: searchInfo
+    })
+      .then((response) => {
+        boardList.value = response.data
+      })
+      .catch((error) => {
+        console.log(error)
+        router.push({ name: 'boardList' })
+      })
+  }
 
   const getBoard = function (boardId) {
     axios.get(`${REST_BOARD_API}/${boardId}`)
       .then((response) => {
-      board.value = response.data
+        board.value = response.data
       })
       .catch((error) => {
         console.log(error)
-        router.push({name: 'home'})
-    })
+        router.push({ name: 'home' })
+      })
   }
 
   const createBoard = function (board) {
@@ -41,12 +52,12 @@ export const useBoardStore = defineStore('boardStore', () => {
       }
     })
       .then(() => {
-        router.push({ name: 'boardList'})
+        router.push({ name: 'boardList' })
       })
       .catch((error) => {
         console.log(error)
         router.push({ name: 'boardList' })
-    })
+      })
   }
 
   const modifyBoard = function (boardId) {
@@ -56,17 +67,31 @@ export const useBoardStore = defineStore('boardStore', () => {
       }
     })
       .then(() => {
-      router.push(`/board/${boardId}`)
+        router.push(`/board/${boardId}`)
       })
       .catch((error) => {
-      console.log(error)
-      router.push(`/board/${boardId}`)
-    })
+        console.log(error)
+        router.push(`/board/${boardId}`)
+      })
   }
 
-  // const removeBoard
+  const removeBoard = function (boardId) {
+    axios.delete(`${REST_BOARD_API}/${boardId}`, {
+      headers: {
+        'access-token': sessionStorage.getItem('access-token')
+      }
+    })
+      .then(() => {
+        router.push({ name: 'boardList' })
+      })
+      .catch((error) => {
+        console.log(error)
+        router.push(`/board/${boardId}`)
+      })
+  }
 
   return {
+    boardList, board,
     getBoardList, searchBoard, getBoard, createBoard, modifyBoard, removeBoard,
   }
 })
