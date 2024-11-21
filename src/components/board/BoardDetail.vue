@@ -3,7 +3,7 @@ import { useRoute, useRouter } from "vue-router";
 import { onMounted } from "vue";
 import { useBoardStore } from "@/stores/board";
 import { useCommentStore } from '@/stores/comment'
-import { useFileStore } from '@/stores/file'
+import { useBoardImageStore } from '@/stores/boardImage'
 import CommentList from '@/components/comment/CommentList.vue'
 import CommentCreate from '@/components/comment/CommentCreate.vue'
 
@@ -11,7 +11,7 @@ const route = useRoute();
 const router = useRouter();
 const boardStore = useBoardStore();
 const commentStore = useCommentStore()
-const fileStore = useFileStore()
+const boardImageStore = useBoardImageStore()
 
 const boardId = route.params.boardId
 

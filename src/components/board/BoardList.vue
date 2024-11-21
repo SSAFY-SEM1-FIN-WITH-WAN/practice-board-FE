@@ -2,12 +2,12 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from "vue-router";
 import { useBoardStore } from '@/stores/board'
-import { useFileStore } from '@/stores/file'
+import { useBoardImageStore } from '@/stores/boardImage'
 import BoardSearchInput from '@/components/board/BoardSearchInput.vue'
 
 const router = useRouter();
 const boardStore = useBoardStore()
-const fileStore = useFileStore()
+const boardImageStore = useBoardImageStore()
 
 const currentPage = ref(1)
 const perPage = 4

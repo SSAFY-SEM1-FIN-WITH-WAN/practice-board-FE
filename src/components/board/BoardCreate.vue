@@ -1,11 +1,11 @@
 <script setup>
 import { ref } from 'vue'
 import { useBoardStore } from '@/stores/board'
-import { useFileStore } from '@/stores/file'
+import { useBoardImageStore } from '@/stores/boardImage'
 import BoardImageUploader from '@/components/board/BoardImageUploader.vue';
 
 const boardStore = useBoardStore()
-const fileStore = useFileStore()
+const boardImageStore = useBoardImageStore()
 
 const board = ref({
     title: '',

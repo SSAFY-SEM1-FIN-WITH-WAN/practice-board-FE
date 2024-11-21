@@ -1,4 +1,7 @@
 <script setup>
+import { useBoardImageStore } from '@/stores/boardImage'
+
+const boardImageStore = useBoardImageStore()
 
 </script>
 
