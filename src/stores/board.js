@@ -51,12 +51,12 @@ export const useBoardStore = defineStore('boardStore', () => {
         'access-token': sessionStorage.getItem('access-token')
       }
     })
-      .then(() => {
-        router.push({ name: 'boardList' })
+      .then(response => {
+        console.log('업로드 성공')
+        return response.data
       })
       .catch((error) => {
         console.log(error)
-        router.push({ name: 'boardList' })
       })
   }
 
@@ -82,10 +82,12 @@ export const useBoardStore = defineStore('boardStore', () => {
       }
     })
       .then(() => {
+        alert('게시글이 삭제 되었습니다')
         router.push({ name: 'boardList' })
       })
       .catch((error) => {
         console.log(error)
+        alert('게시글 삭제 중 문제가 발생했습니다')
         router.push(`/board/${boardId}`)
       })
   }

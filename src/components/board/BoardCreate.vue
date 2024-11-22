@@ -1,9 +1,12 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useBoardStore } from '@/stores/board'
 import { useBoardImageStore } from '@/stores/boardImage'
 import BoardImageUploader from '@/components/board/BoardImageUploader.vue';
 
+const route = useRoute();
+const router = useRouter()
 const boardStore = useBoardStore()
 const boardImageStore = useBoardImageStore()
 
@@ -12,9 +15,23 @@ const board = ref({
     content: '',
 })
 
-const createBoard = function () {
-    boardStore.createBoard(board.value)
+const images = ref([])
+
+const createBoard = async function () {
+    try {
+        await boardStore.createBoard(board.value)
+
+        if (images.value.length > 0) {
+            await boardImageStore.uploadBoardImage(boardId, images.value)
+        }
+
+        router.push(`/board/${boardId}`)
+    } catch (error) {
+        console.log(error)
+        router.push({ name: 'boardList' })
+    }
 }
+
 </script>
 
 <template>
@@ -33,6 +50,11 @@ const createBoard = function () {
                         <input type="text" class="form-control" id="content" placeholder="내용" v-model="board.content">
                         <label for="text">내용</label>
                     </div>
+
+                    <div class="mb-3">
+                        <BoardImageUploader :images="images" />
+                    </div>
+
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary w-100">등록</button>
                     </div>

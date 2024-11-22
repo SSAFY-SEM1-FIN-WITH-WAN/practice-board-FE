@@ -57,7 +57,7 @@ export const useUserStore = defineStore('userStore', () => {
   }
 
   const modifyUser = function () {
-    axios.put(`${REST_USER_API}/info`, loginUser.value, { 
+    axios.put(`${REST_USER_API}/info`, loginUser.value, {
       headers: {
         'access-token': sessionStorage.getItem('access-token')
       }
@@ -81,6 +81,7 @@ export const useUserStore = defineStore('userStore', () => {
       .then((response) => {
         if (response.data && response.data['access-token']) {
           errorMessage.value = ''
+          alert('WELCOME TO WhatsYouLook !!')
           sessionStorage.setItem('access-token', response.data['access-token']);
           router.push({ name: 'home' })
         } else {
@@ -98,6 +99,7 @@ export const useUserStore = defineStore('userStore', () => {
   const logout = function () {
     sessionStorage.removeItem('access-token');
     console.log('로그아웃 완료');
+    alert('로그아웃 성공')
     router.push({ name: 'home' })
   };
 

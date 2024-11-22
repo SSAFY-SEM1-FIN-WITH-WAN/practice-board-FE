@@ -58,10 +58,12 @@ export const useCommentStore = defineStore('commentStore', () => {
       }
     })
       .then(() => {
+        alert('댓글이 삭제 되었습니다')
         router.push(`/board/${boardId}`)
       })
       .catch((error) => {
         console.log(error)
+        alert('댓글 삭제 중 문제가 발생했습니다')
         router.push(`/board/${boardId}`)
       })
   }

@@ -10,8 +10,8 @@ import CommentCreate from '@/components/comment/CommentCreate.vue'
 const route = useRoute();
 const router = useRouter();
 const boardStore = useBoardStore();
-const commentStore = useCommentStore()
 const boardImageStore = useBoardImageStore()
+const commentStore = useCommentStore()
 
 const boardId = route.params.boardId
 
@@ -29,6 +29,7 @@ const handleAddComment = function () {
 
 onMounted(() => {
     boardStore.getBoard(boardId)
+    boardImageStore.getBoardImageList(boardId)
     commentStore.getCommentList(boardId)
 })
 </script>
@@ -39,12 +40,29 @@ onMounted(() => {
             <div class="content-area" style="max-width: 1000px; margin: 0 auto;">
                 <div class="card-body">
                     <div class="mb-3 d-flex justify-content-between align-items-center">
-                        <h4 class="card-title">{{ boardStore.board.title }} <span class="badge bg-danger">{{ boardStore.board.viewCnt }}</span></h4>
+                        <h4 class="card-title">{{ boardStore.board.title }}
+                            <span class="badge bg-danger">{{ boardStore.board.viewCnt }}</span>
+                        </h4>
                         <div class="d-flex justify-content-end">
-                            <h6 class="card-subtitle mx-3 text-body-secondary">{{ boardStore.board.userName }}</h6>
-                            <h6 class="card-subtitle text-body-secondary">{{ boardStore.board.createdAt }}</h6>
+                            <h6 class="card-subtitle mx-3 text-body-secondary">
+                                {{ boardStore.board.userName }}
+                            </h6>
+                            <h6 class="card-subtitle text-body-secondary">
+                                {{ boardStore.board.createdAt }}
+                            </h6>
                         </div>
                     </div>
+
+                    <div class="image-gallery mb-3">
+                        <img
+                            v-for="boardImage in boardImageStore.boardImageList"
+                            :key="boardImage.id"
+                            :src="boardImage.filePath"
+                            class="img-thumbnail mb-3"
+                            alt="게시글 이미지"
+                        />
+                    </div>
+
                     <p class="card-text">
                         {{ boardStore.board.content }}
                     </p>
@@ -69,6 +87,31 @@ onMounted(() => {
     padding: 20px;
     border-radius: 8px;
     background-color: #f8f9fa;
+}
+
+.image-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.img-thumbnail {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .comment-section {
